@@ -85,3 +85,31 @@ def test_create_task__required_param_missed(session):
     with allure.step(f'Assert response code is 400 and error message'):
         assert resp.status_code == 400
         assert resp.json()['error'] == 'Required argument is missing'
+
+
+@allure.epic('Authorization')
+@allure.story('Create task')
+@allure.title('[Task][Unauthorized] Create.')
+@allure.description('Task can not be created with unauthorized request.')
+@allure.tag('Regression', 'Security')
+@allure.severity(Severity.BLOCKER)
+def test_create_task__unauthorized(unauthorized_session):
+    new_task = TaskRequest(content='Test task')
+    with allure.step('Make an unauthorized request'):
+        resp = api.create_task(unauthorized_session, json=new_task)
+    with allure.step('Assert response code is 401'):
+        assert resp.status_code == 401
+
+
+@allure.epic('Authorization')
+@allure.story('Create task')
+@allure.title('[Task][Invalid token] Create.')
+@allure.description('Task can not be created with invalid token used.')
+@allure.tag('Regression', 'Security')
+@allure.severity(Severity.BLOCKER)
+def test_create_task__invalid_token(invalid_auth_session):
+    new_task = TaskRequest(content='Test task')
+    with allure.step('Make a request with invalid token'):
+        resp = api.create_task(invalid_auth_session, json=new_task)
+    with allure.step('Assert response code is 401'):
+        assert resp.status_code == 401

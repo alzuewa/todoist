@@ -98,3 +98,33 @@ def test_update__invalid_color(session, create_new_project):
     with allure.step('Assert response code is 400 and error message'):
         assert resp.status_code == 400
         assert resp.text == 'Invalid argument value'
+
+
+@allure.epic('Authorization')
+@allure.story('Update project')
+@allure.title('[Project][Unauthorized] Update.')
+@allure.description('Project can not be updated with unauthorized request.')
+@allure.tag('Regression', 'Security')
+@allure.severity(Severity.BLOCKER)
+def test_update_project__unauthorized(unauthorized_session, create_new_project):
+    new_project = create_new_project
+    json = ProjectRequest(is_favorite=True)
+    with allure.step('Make an unauthorized request'):
+        resp = api.update_project(unauthorized_session, project_id=new_project.id, json=json)
+    with allure.step('Assert response code is 401'):
+        assert resp.status_code == 401
+
+
+@allure.epic('Authorization')
+@allure.story('Update project')
+@allure.title('[Project][Invalid token] Update.')
+@allure.description('Project can not be updated with invalid token used.')
+@allure.tag('Regression', 'Security')
+@allure.severity(Severity.BLOCKER)
+def test_update_project__invalid_token(invalid_auth_session, create_new_project):
+    new_project = create_new_project
+    json = ProjectRequest(is_favorite=True)
+    with allure.step('Make a request with invalid token'):
+        resp = api.update_project(invalid_auth_session, project_id=new_project.id, json=json)
+    with allure.step('Assert response code is 401'):
+        assert resp.status_code == 401

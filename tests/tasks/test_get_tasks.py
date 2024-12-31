@@ -59,3 +59,31 @@ def test_get_all_tasks(session, create_new_task):
     with allure.step(f'Assert tasks\' content match expected values'):
         actual_tasks = set([task.content for task in tasks_response])
         assert actual_tasks == expected_tasks
+
+
+@allure.epic('Authorization')
+@allure.story('Get task')
+@allure.title('[Task][Unauthorized] Get.')
+@allure.description('Task can not be retrieved with unauthorized request.')
+@allure.tag('Regression', 'Security')
+@allure.severity(Severity.BLOCKER)
+def test_get_task__unauthorized(unauthorized_session, create_new_task):
+    new_task = create_new_task
+    with allure.step('Make an unauthorized request'):
+        resp = api.get_task(unauthorized_session, task_id=new_task.id)
+    with allure.step('Assert response code is 401'):
+        assert resp.status_code == 401
+
+
+@allure.epic('Authorization')
+@allure.story('Get task')
+@allure.title('[Task][Invalid token] Get.')
+@allure.description('Task can not be retrieved with invalid token used.')
+@allure.tag('Regression', 'Security')
+@allure.severity(Severity.BLOCKER)
+def test_get_task__invalid_token(invalid_auth_session, create_new_task):
+    new_task = create_new_task
+    with allure.step('Make a request with invalid token'):
+        resp = api.get_task(invalid_auth_session, task_id=new_task.id)
+    with allure.step('Assert response code is 401'):
+        assert resp.status_code == 401

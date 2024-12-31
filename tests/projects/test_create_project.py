@@ -104,3 +104,31 @@ def test_create_project__required_param_invalid_value(session, name):
     with allure.step(f'Assert response code is 400 and error message'):
         assert resp.status_code == 400
         assert resp.text == 'Name must be provided for the project creation'
+
+
+@allure.epic('Authorization')
+@allure.story('Create project')
+@allure.title('[Project][Unauthorized] Create.')
+@allure.description('Project can not be created with unauthorized request.')
+@allure.tag('Regression', 'Security')
+@allure.severity(Severity.BLOCKER)
+def test_create_project__unauthorized(unauthorized_session):
+    with allure.step('Make an unauthorized request'):
+        new_project = ProjectRequest(name='Test Project')
+        resp = api.create_project(unauthorized_session, json=new_project)
+    with allure.step('Assert response code is 401'):
+        assert resp.status_code == 401
+
+
+@allure.epic('Authorization')
+@allure.story('Create project')
+@allure.title('[Project][Invalid token] Create.')
+@allure.description('Project can not be created with invalid token used.')
+@allure.tag('Regression', 'Security')
+@allure.severity(Severity.BLOCKER)
+def test_create_project__invalid_token(invalid_auth_session):
+    with allure.step('Make a request with invalid token'):
+        new_project = ProjectRequest(name='Test Project')
+        resp = api.create_project(invalid_auth_session, json=new_project)
+    with allure.step('Assert response code is 401'):
+        assert resp.status_code == 401

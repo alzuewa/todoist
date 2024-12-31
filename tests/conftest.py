@@ -1,5 +1,6 @@
 import allure
 import pytest
+import secrets
 
 from config import config
 from data.models.request_models import ProjectRequest
@@ -18,6 +19,13 @@ def authorized_session():
 @pytest.fixture(scope='function')
 def unauthorized_session():
     session = ApiSession(base_url=config.base_url)
+
+    yield session
+
+@pytest.fixture(scope='function')
+def invalid_auth_session():
+    random_token = secrets.token_hex(20)
+    session = ApiSession(base_url=config.base_url, auth=BearerAuth(random_token))
 
     yield session
 

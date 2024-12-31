@@ -52,3 +52,33 @@ def test_task_update__invalid_priority(session, create_new_task, priority):
 
     with allure.step('Assert task priority value has not changed'):
         assert task_response.priority == new_task.priority
+
+
+@allure.epic('Authorization')
+@allure.story('Update task')
+@allure.title('[Task][Unauthorized] Update.')
+@allure.description('Task can not be updated with unauthorized request.')
+@allure.tag('Regression', 'Security')
+@allure.severity(Severity.BLOCKER)
+def test_update_task__unauthorized(unauthorized_session, create_new_task):
+    new_task = create_new_task
+    json = TaskRequest(priority=2)
+    with allure.step('Make an unauthorized request'):
+        resp = api.update_task(unauthorized_session, task_id=new_task.id, json=json)
+    with allure.step('Assert response code is 401'):
+        assert resp.status_code == 401
+
+
+@allure.epic('Authorization')
+@allure.story('Update task')
+@allure.title('[Task][Invalid token] Update.')
+@allure.description('Task can not be updated with invalid token used.')
+@allure.tag('Regression', 'Security')
+@allure.severity(Severity.BLOCKER)
+def test_update_task__invalid_token(invalid_auth_session, create_new_task):
+    new_task = create_new_task
+    json = TaskRequest(priority=2)
+    with allure.step('Make a request with invalid token'):
+        resp = api.update_task(invalid_auth_session, task_id=new_task.id, json=json)
+    with allure.step('Assert response code is 401'):
+        assert resp.status_code == 401
