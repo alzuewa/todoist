@@ -92,8 +92,8 @@ Todoist itself is an app that helps organize and manage projects and tasks.
 
 Test running requires **Bearer Token** and **Inbox ID**.  
 - *Bearer Token* is a token in one's Todoist space. To obtain it, it needs to be registered in
-   the [app](#https://todoist.com).  
-   From developer docs:
+   the [app](https://todoist.com).  
+   From the developer [docs](https://developer.todoist.com/sync/v9/#get-all-projects):
 
 > You can find your token from the Todoist Web app, at `Todoist Settings -> Integrations -> API token`. This token
 > remains valid until a new one is generated.
