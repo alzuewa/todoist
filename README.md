@@ -77,7 +77,7 @@ Todoist itself is an app that helps organize and manage projects and tasks.
         * ✓ existing task
         * ✓ not existing task
     * ☑️ Reopen task
-        * ✓ reopen existing previously closed task
+        * ✓ reopen previously closed task
         * ✓ reopen opened task
         * ✓ reopen task which has closed ancestor
     * ☑️ Delete task
@@ -109,7 +109,8 @@ Test running requires **Bearer Token** and **Inbox ID**.
 4. Click on `Build`
 5. After build is finished, links to Allure Report and Allure TestOps will be shown next to the job
 
-> > ⚠️ Only the digits part needs to be placed in `INBOX_ID` field, without 'Bearer' word.
+> [!IMPORTANT]  
+> ⚠️ Only the digits part of token needs to be placed in `INBOX_ID` field, without 'Bearer' word.
 > 
 
 <p align="center">
@@ -132,8 +133,8 @@ poetry install --no-root
 
 3. In the project root create `.env` file and put `token` and `inbox_id` into it as it's shown in `.env_example`.  
    
-
-> > ⚠️ Only the digits part needs to be placed in `.env`, without 'Bearer' word.
+> [!IMPORTANT]  
+> ⚠️ Only the digits part of token needs to be placed in `.env`, without 'Bearer' word.
 >
 
 4. Run tests
