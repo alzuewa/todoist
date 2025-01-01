@@ -15,7 +15,7 @@ from utils import api
 def test_get_task(session, create_new_task):
     new_task = create_new_task
 
-    with allure.step(f'Get task: {new_task.id=}'):
+    with allure.step(f'Get task: id={new_task.id}'):
         resp = api.get_task(session, task_id=new_task.id)
 
     with allure.step(f'Validate json response schema'):

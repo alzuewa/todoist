@@ -18,7 +18,7 @@ def test_delete_existing_project(session, create_new_project):
         resp = api.delete_project(session, project_id=new_project.id)
     with allure.step(f'Assert response code is 204'):
         assert resp.status_code == 204
-    with allure.step(f'Assert deleted project can not be retrieved and 404 response code'):
+    with allure.step(f'Assert deleted project can not be retrieved and 404 response code is returned'):
         assert api.get_project(session, project_id=new_project.id).status_code == 404
 
 

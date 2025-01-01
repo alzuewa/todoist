@@ -13,7 +13,7 @@ from utils import api
 @allure.severity(Severity.CRITICAL)
 def test_close_existing_task(session, create_new_task):
     new_task = create_new_task
-    with allure.step(f'Close task: {new_task.id=}, {new_task.content=}'):
+    with allure.step(f'Close task: id={new_task.id}, content={new_task.content}'):
         resp = api.close_task(session, task_id=new_task.id)
     with allure.step('Assert response code is 204'):
         assert resp.status_code == 204
