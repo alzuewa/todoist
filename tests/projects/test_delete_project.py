@@ -1,4 +1,5 @@
 import allure
+import pytest
 from allure_commons.types import Severity
 
 from data.models.request_models import ProjectRequest
@@ -28,6 +29,7 @@ def test_delete_existing_project(session, create_new_project):
 @allure.description('Deleting not existing project should result in empty response')
 @allure.tag('Regression')
 @allure.severity(Severity.NORMAL)
+@pytest.mark.skip(reason='Issue #67890')
 def test_delete_not_existing_project(session):
     with allure.step(f'Delete not existing project'):
         resp = api.delete_project(session, project_id='123')

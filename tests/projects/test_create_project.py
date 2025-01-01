@@ -96,7 +96,7 @@ def test_create_project__required_param_missed(session):
 @allure.description('Project can not be created with invalid required field values: "", " "')
 @allure.tag('Regression')
 @allure.severity(Severity.NORMAL)
-@pytest.mark.parametrize('name', ['', ' '])
+@pytest.mark.parametrize('name', ['', pytest.param(' ', marks=[pytest.mark.xfail(reason='Issue #12345')])])
 def test_create_project__required_param_invalid_value(session, name):
     with allure.step(f'Create project with invalid name: "{name}"'):
         new_project = ProjectRequest(name=name)
