@@ -110,7 +110,7 @@ Test running requires **Bearer Token** and **Inbox ID**.
 5. After build is finished, links to Allure Report and Allure TestOps will be shown next to the job
 
 > [!IMPORTANT]  
-> ⚠️ Only the digits part of token needs to be placed in `INBOX_ID` field, without 'Bearer' word.
+> ⚠️ Only the digits part of token needs to be placed in `BEARER` field, without 'Bearer' word.
 > 
 
 <p align="center">
