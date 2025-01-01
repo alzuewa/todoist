@@ -4,6 +4,7 @@ import requests
 from requests import Session
 from requests.auth import AuthBase
 
+from utils.helpers import retry_request
 from utils.logger import logger
 
 
@@ -27,6 +28,7 @@ class ApiSession(Session):
         self.headers = {'Content-Type': 'application/json'}
 
     @logger
+    @retry_request(retry_count=7, delay=4)
     def request(self, endpoint_path: str, method: str, **kwargs) -> requests.Response:
         url = f'{self.base_url}{endpoint_path}'
         if self.auth:
