@@ -79,3 +79,7 @@ def update_task(session: ApiSession, task_id: str, json: Optional[TaskRequest] =
 def close_task(session: ApiSession, task_id: str):
     response = session.post(f'/tasks/{task_id}/close')
     return response
+
+def reopen_task(session: ApiSession, task_id: str):
+    response = session.post(f'/tasks/{task_id}/reopen')
+    return response
