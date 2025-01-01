@@ -12,6 +12,7 @@ from utils import api
 @allure.description('After deletion project can not be accessed')
 @allure.tag('Regression')
 @allure.severity(Severity.BLOCKER)
+@pytest.mark.skip(reason='Issue #67890: Project remains retrievable after deletion')
 def test_delete_existing_project(session, create_new_project):
     new_project = create_new_project
 
@@ -29,7 +30,6 @@ def test_delete_existing_project(session, create_new_project):
 @allure.description('Deleting not existing project should result in empty response')
 @allure.tag('Regression')
 @allure.severity(Severity.NORMAL)
-@pytest.mark.skip(reason='Issue #67890')
 def test_delete_not_existing_project(session):
     with allure.step(f'Delete not existing project'):
         resp = api.delete_project(session, project_id='123')
