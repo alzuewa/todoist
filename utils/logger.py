@@ -23,14 +23,21 @@ def logger(func: Callable):
         result = func(*args, **kwargs)
         try:
             allure.attach(
-                body=json.dumps(result.json(), indent=4, ensure_ascii=True), name="Response",
-                attachment_type=AttachmentType.JSON, extension=".json"
+                body=json.dumps(result.json(), indent=4, ensure_ascii=True), name='Response',
+                attachment_type=AttachmentType.JSON, extension='.json'
             )
         except JSONDecodeError:
             try:
-                allure.attach(body=result.text, name="Response", attachment_type=AttachmentType.TEXT, extension=".txt")
+                allure.attach(
+                    body=result.text, name='Response', attachment_type=AttachmentType.TEXT, extension='.txt'
+                )
             except JSONDecodeError:
-                allure.attach(body='None', name="Response", attachment_type=AttachmentType.TEXT, extension=".txt")
+                try:
+                    allure.attach(
+                        body=result.reason, name='Response', attachment_type=AttachmentType.TEXT, extension='.txt'
+                    )
+                except JSONDecodeError:
+                    allure.attach(body='None', name="Response", attachment_type=AttachmentType.TEXT, extension=".txt")
 
         _logger.info(f'Request URL:: {result.request.url}')
         _logger.info(f'Request method:: {result.request.method}')
@@ -41,12 +48,15 @@ def logger(func: Callable):
             _logger.info(f'Request body:: None')
         _logger.info(f'Response status code:: {result.status_code}')
         try:
-            _logger.info(f'Response body:: {result.json()}\n<=====\n')
+            _logger.info(f'Response json:: {result.json()}\n<=====\n')
         except JSONDecodeError:
             try:
-                _logger.info(f'Response body:: {result.text}\n<=====\n')
+                _logger.info(f'Response text:: {result.text}\n<=====\n')
             except JSONDecodeError:
-                _logger.info(f'Response body:: None\n<=====\n')
+                try:
+                    _logger.info(f'Response reason:: {result.reason}\n<=====\n')
+                except JSONDecodeError:
+                    _logger.info(f'Response body:: None\n<=====\n')
         return result
 
     return wrapper
