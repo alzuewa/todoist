@@ -1,7 +1,6 @@
 import allure
 from allure_commons.types import Severity
 
-from data.models.request_models import ProjectRequest
 from data.models.response_models import AllProjectsResponse, ProjectResponse
 from data.project_constants import Color, ViewStyle
 from utils import api

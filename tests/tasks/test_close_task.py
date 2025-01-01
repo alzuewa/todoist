@@ -1,7 +1,6 @@
 import allure
 from allure_commons.types import Severity
 
-from data.models.request_models import TaskRequest
 from utils import api
 
 

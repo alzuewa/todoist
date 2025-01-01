@@ -2,7 +2,6 @@ import allure
 import pytest
 from allure_commons.types import Severity
 
-from data.models.request_models import ProjectRequest
 from utils import api
 
 

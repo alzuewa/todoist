@@ -37,7 +37,7 @@ def test_update_task_description(session, create_new_task):
 @allure.tag('Edit', 'New feature')
 @allure.severity(Severity.NORMAL)
 @pytest.mark.parametrize('priority', [-1, 0, 5])
-def test_task_update__invalid_priority(session, create_new_task, priority):
+def test_update_task__invalid_priority(session, create_new_task, priority):
     new_task = create_new_task
 
     with allure.step(f'Update task priority with invalid value: {priority=}'):
