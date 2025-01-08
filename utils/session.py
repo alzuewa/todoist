@@ -4,7 +4,7 @@ import requests
 from requests import Session
 from requests.auth import AuthBase
 
-from utils.helpers import retry_request
+from utils.request_utils import retry_request
 from utils.logger import logger
 
 
