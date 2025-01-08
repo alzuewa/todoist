@@ -1,11 +1,12 @@
-import allure
-import pytest
 import secrets
 
-from config import config
+import allure
+import pytest
+
+import api.projects
+from config.test_project_config import config
 from data.models.request_models import ProjectRequest
 from data.models.response_models import ProjectResponse
-from utils import api
 from utils.session import ApiSession, BearerAuth
 
 
@@ -22,6 +23,7 @@ def unauthorized_session():
 
     yield session
 
+
 @pytest.fixture(scope='function')
 def invalid_auth_session():
     random_token = secrets.token_hex(20)
@@ -31,20 +33,17 @@ def invalid_auth_session():
 
 
 @pytest.fixture(scope='function', autouse=True)
-def delete_all_projects(session):
+def delete_all_created_projects(session):
     yield
 
-    with allure.step(f'Delete all projects'):
-        response = api.get_all_projects(session).json()
-        project_ids = [project['id'] for project in response if project['name'] != 'Inbox']
-        for project_id in project_ids:
-            api.delete_project(session, project_id=project_id)
+    with allure.step(f'Delete all created projects but Inbox'):
+        api.projects.delete_all_projects_but_inbox(session)
 
 
 @pytest.fixture(scope='function')
 def create_new_project(session):
     with allure.step(f'Create fixture project with name: Shopping list'):
         project = ProjectRequest(name='Shopping list')
-        resp = api.create_project(session, project)
+        resp = api.projects.create_project(session, project)
         project_resp = ProjectResponse.model_validate(resp.json())
         return project_resp
