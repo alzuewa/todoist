@@ -1,9 +1,9 @@
 import allure
 from allure_commons.types import Severity
 
+import api.tasks
 from data.models.request_models import TaskRequest
 from data.models.response_models import TaskResponse, AllTasksResponse
-from utils import api
 
 
 @allure.epic('Tasks')
@@ -16,7 +16,7 @@ def test_get_task(session, create_new_task):
     new_task = create_new_task
 
     with allure.step(f'Get task: id={new_task.id}'):
-        resp = api.get_task(session, task_id=new_task.id)
+        resp = api.tasks.get_task(session, task_id=new_task.id)
 
     with allure.step(f'Validate json response schema'):
         task_response = TaskResponse.model_validate(resp.json())
@@ -44,11 +44,11 @@ def test_get_all_tasks(session, create_new_task):
 
     with allure.step('Create task: Call the friend'):
         new_task_2 = TaskRequest(content='Call the friend')
-        api.create_task(session, json=new_task_2)
+        api.tasks.create_task(session, json=new_task_2)
         expected_tasks = {new_task_1.content, new_task_2.content}
 
     with allure.step('Get all tasks'):
-        resp = api.get_all_tasks(session)
+        resp = api.tasks.get_all_tasks(session)
 
     with allure.step(f'Validate json response schema'):
         tasks_response = AllTasksResponse.model_validate(resp.json())
@@ -62,7 +62,6 @@ def test_get_all_tasks(session, create_new_task):
 
 
 @allure.epic('Authorization')
-@allure.story('Get task')
 @allure.title('[Task][Unauthorized] Get.')
 @allure.description('Task can not be retrieved with unauthorized request.')
 @allure.tag('Regression', 'Security')
@@ -70,13 +69,12 @@ def test_get_all_tasks(session, create_new_task):
 def test_get_task__unauthorized(unauthorized_session, create_new_task):
     new_task = create_new_task
     with allure.step('Make an unauthorized request'):
-        resp = api.get_task(unauthorized_session, task_id=new_task.id)
+        resp = api.tasks.get_task(unauthorized_session, task_id=new_task.id)
     with allure.step('Assert response code is 401'):
         assert resp.status_code == 401
 
 
 @allure.epic('Authorization')
-@allure.story('Get task')
 @allure.title('[Task][Invalid token] Get.')
 @allure.description('Task can not be retrieved with invalid token used.')
 @allure.tag('Regression', 'Security')
@@ -84,6 +82,6 @@ def test_get_task__unauthorized(unauthorized_session, create_new_task):
 def test_get_task__invalid_token(invalid_auth_session, create_new_task):
     new_task = create_new_task
     with allure.step('Make a request with invalid token'):
-        resp = api.get_task(invalid_auth_session, task_id=new_task.id)
+        resp = api.tasks.get_task(invalid_auth_session, task_id=new_task.id)
     with allure.step('Assert response code is 401'):
         assert resp.status_code == 401

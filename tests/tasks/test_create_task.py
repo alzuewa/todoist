@@ -1,10 +1,10 @@
 import allure
 from allure_commons.types import Severity
 
-from config import config
+import api.tasks
+from config.test_project_config import config
 from data.models.request_models import TaskRequest
 from data.models.response_models import TaskResponse
-from utils import api
 
 
 @allure.epic('Tasks')
@@ -16,7 +16,7 @@ from utils import api
 def test_create_task__only_required_param(session):
     with allure.step(f'Create task with name: Buy bread'):
         new_task = TaskRequest(content='Buy bread')
-        resp = api.create_task(session, json=new_task)
+        resp = api.tasks.create_task(session, json=new_task)
 
     with allure.step('Assert response code is 200'):
         assert resp.status_code == 200
@@ -27,7 +27,7 @@ def test_create_task__only_required_param(session):
     with allure.step(f'Validate fields\' values'):
         assert task_response.content == new_task.content
         assert task_response.labels == []
-        assert task_response.is_completed == False
+        assert task_response.is_completed is False
         assert task_response.due is None
         assert task_response.duration is None
         assert task_response.priority == 1
@@ -52,7 +52,7 @@ def test_create_task_many_params(session, create_new_project):
             priority=3,
             labels=['groceries', 'home']
         )
-        resp = api.create_task(session, json=new_task)
+        resp = api.tasks.create_task(session, json=new_task)
 
     with allure.step('Assert response code is 200'):
         assert resp.status_code == 200
@@ -63,7 +63,7 @@ def test_create_task_many_params(session, create_new_project):
     with allure.step(f'Validate fields\' values'):
         assert task_response.content == new_task.content
         assert task_response.labels == new_task.labels
-        assert task_response.is_completed == False
+        assert task_response.is_completed is False
         assert task_response.due is None
         assert task_response.duration is None
         assert task_response.priority == 3
@@ -81,14 +81,13 @@ def test_create_task_many_params(session, create_new_project):
 @allure.severity(Severity.CRITICAL)
 def test_create_task__required_param_missed(session):
     with allure.step(f'Create task without body in request'):
-        resp = api.create_task(session)
+        resp = api.tasks.create_task(session)
     with allure.step(f'Assert response code is 400 and error message'):
         assert resp.status_code == 400
         assert resp.json()['error'] == 'Required argument is missing'
 
 
 @allure.epic('Authorization')
-@allure.story('Create task')
 @allure.title('[Task][Unauthorized] Create.')
 @allure.description('Task can not be created with unauthorized request.')
 @allure.tag('Regression', 'Security')
@@ -96,13 +95,12 @@ def test_create_task__required_param_missed(session):
 def test_create_task__unauthorized(unauthorized_session):
     new_task = TaskRequest(content='Test task')
     with allure.step('Make an unauthorized request'):
-        resp = api.create_task(unauthorized_session, json=new_task)
+        resp = api.tasks.create_task(unauthorized_session, json=new_task)
     with allure.step('Assert response code is 401'):
         assert resp.status_code == 401
 
 
 @allure.epic('Authorization')
-@allure.story('Create task')
 @allure.title('[Task][Invalid token] Create.')
 @allure.description('Task can not be created with invalid token used.')
 @allure.tag('Regression', 'Security')
@@ -110,6 +108,6 @@ def test_create_task__unauthorized(unauthorized_session):
 def test_create_task__invalid_token(invalid_auth_session):
     new_task = TaskRequest(content='Test task')
     with allure.step('Make a request with invalid token'):
-        resp = api.create_task(invalid_auth_session, json=new_task)
+        resp = api.tasks.create_task(invalid_auth_session, json=new_task)
     with allure.step('Assert response code is 401'):
         assert resp.status_code == 401

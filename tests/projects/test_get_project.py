@@ -1,9 +1,9 @@
 import allure
 from allure_commons.types import Severity
 
+import api.projects
 from data.models.response_models import AllProjectsResponse, ProjectResponse
 from data.project_constants import Color, ViewStyle
-from utils import api
 
 
 @allure.epic('Projects')
@@ -16,7 +16,7 @@ def test_get_project(session, create_new_project):
     new_project = create_new_project
 
     with allure.step(f'Get project with id: {new_project.id}'):
-        resp = api.get_project(session, project_id=new_project.id)
+        resp = api.projects.get_project(session, project_id=new_project.id)
 
     with allure.step('Assert response code is 200'):
         assert resp.status_code == 200
@@ -31,10 +31,10 @@ def test_get_project(session, create_new_project):
         assert project_response.order == 1
         assert project_response.color == Color.CHARCOAL
         assert project_response.comment_count == 0
-        assert project_response.is_shared == False
-        assert project_response.is_favorite == False
-        assert project_response.is_inbox_project == False
-        assert project_response.is_team_inbox == False
+        assert project_response.is_shared is False
+        assert project_response.is_favorite is False
+        assert project_response.is_inbox_project is False
+        assert project_response.is_team_inbox is False
         assert project_response.view_style == ViewStyle.LIST
 
 
@@ -49,7 +49,7 @@ def test_get_all_projects(session, create_new_project):
     expected_projects = {'Inbox', create_new_project.name}
 
     with allure.step('Get all projects'):
-        resp = api.get_all_projects(session)
+        resp = api.projects.get_all_projects(session)
 
     with allure.step('Assert response code is 200'):
         assert resp.status_code == 200
@@ -66,7 +66,6 @@ def test_get_all_projects(session, create_new_project):
 
 
 @allure.epic('Authorization')
-@allure.story('Get project')
 @allure.title('[Project][Unauthorized] Get.')
 @allure.description('Project can not be retrieved with unauthorized request.')
 @allure.tag('Regression', 'Security')
@@ -74,13 +73,12 @@ def test_get_all_projects(session, create_new_project):
 def test_get_project__unauthorized(unauthorized_session, create_new_project):
     new_project = create_new_project
     with allure.step('Make an unauthorized request'):
-        resp = api.get_project(unauthorized_session, project_id=new_project.id)
+        resp = api.projects.get_project(unauthorized_session, project_id=new_project.id)
     with allure.step('Assert response code is 401'):
         assert resp.status_code == 401
 
 
 @allure.epic('Authorization')
-@allure.story('Get project')
 @allure.title('[Project][Invalid token] Get.')
 @allure.description('Project can not be retrieved with invalid token used.')
 @allure.tag('Regression', 'Security')
@@ -88,6 +86,6 @@ def test_get_project__unauthorized(unauthorized_session, create_new_project):
 def test_get_project__invalid_token(invalid_auth_session, create_new_project):
     new_project = create_new_project
     with allure.step('Make a request with invalid token'):
-        resp = api.get_project(invalid_auth_session, project_id=new_project.id)
+        resp = api.projects.get_project(invalid_auth_session, project_id=new_project.id)
     with allure.step('Assert response code is 401'):
         assert resp.status_code == 401
