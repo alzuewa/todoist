@@ -1,8 +1,8 @@
 [tool.poetry]
 name = "todoist"
 version = "0.1.0"
-description = ""
-authors = [""]
+description = "description"
+authors = ["A"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
