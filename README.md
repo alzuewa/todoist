@@ -152,6 +152,8 @@ allure serve allure-results
 
 ## Allure Report
 
+[Link to Allure report](https://jenkins.autotests.cloud/job/alz-todoist/59/allure/)
+
 Allure Report represents a convenient and easy to use interface to analyse test results.
 It includes:
 
