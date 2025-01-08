@@ -18,7 +18,7 @@ Todoist itself is an app that helps organize and manage projects and tasks.
 - [Allure TestOps](#allure-testops-integration)
 - [Messenger Notifications](#messenger-notifications)
 
-## Technology Stack and Instruments
+## Technology Stack and Tools
 
 <p  align="center">
     <code><img width="5%" title="Python" src="media/icons/python.svg"></code>
