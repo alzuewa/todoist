@@ -11,7 +11,7 @@ Todoist itself is an app that helps organize and manage projects and tasks.
 
 ## Contents
 
-- [Technology Stack and Instruments](#technology-stack-and-instruments)
+- [Technology Stack and Tools](#technology-stack-and-tools)
 - [Covered Functionality](#covered-functionality)
 - [Run Tests in Jenkins](#run-tests-in-jenkins)
 - [Allure Report](#allure-report)
